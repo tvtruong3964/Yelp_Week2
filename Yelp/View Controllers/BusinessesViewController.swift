@@ -118,6 +118,9 @@ class BusinessesViewController: UIViewController, FilterViewControllerDelegate {
             let index = tableView.indexPathForSelectedRow!.row
             let viewController = segue.destination as! DetailViewController
             viewController.business = businesses[index]
+        } else if segue.identifier == "map" {
+            let viewController = segue.destination as! MapDetailViewController
+            viewController.businesses = businesses
         }
         
     }

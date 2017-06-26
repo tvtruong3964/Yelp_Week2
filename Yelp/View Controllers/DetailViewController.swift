@@ -8,6 +8,7 @@
 
 import UIKit
 import AFNetworking
+import MapKit
 
 class DetailViewController: UIViewController {
     @IBOutlet weak var name: UILabel!
@@ -17,22 +18,12 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var address: UILabel!
     @IBOutlet weak var avata: UIImageView!
     @IBOutlet weak var comment: UILabel!
+    @IBOutlet weak var lineView: UIView!
     
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var scrollDetail: UIScrollView!
     
     var business: Business!
-//    {
-//        didSet {
-//            name.text = business.name
-//            address.text = business.address
-//            radius.text = business.distance
-//            rateImage.setImageWith(business.imageURL!)
-//            avata.setImageWith(business.snippetImage!)
-//            comment.text = business.snippetText
-//            category.text = business.categories
-//            
-//        }
-//    }
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,13 +35,39 @@ class DetailViewController: UIViewController {
         avata.setImageWith(business.snippetImage!)
         comment.text = business.snippetText
         category.text = business.categories
+        
+        lineView.backgroundColor = AppColor.headerTableColor
+        comment.sizeToFit()
+        scrollDetail.contentSize = CGSize(width: scrollDetail.bounds.width, height: comment.frame.size.height)
+        
+        
+    
+        
+        // Remove all annotations
+        let annotationsToRemove = mapView.annotations.filter { $0 !== mapView.userLocation }
+        mapView.removeAnnotations(annotationsToRemove )
+        
+        // Location used in YelpClient API
+        var userLocation = CLLocationCoordinate2D()
+        userLocation.latitude = 37.785771
+        userLocation.longitude = -122.406165
+        
+        
+        // Set radius of 1km -> use 0.01 degree
+        let span = MKCoordinateSpanMake(0.007, 0.007)
+        let region = MKCoordinateRegion(center: userLocation, span: span)
+        
+        mapView.setRegion(region, animated: true)
+        mapView.regionThatFits(region)
+        
+        mapView.addAnnotation(business)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
 
     /*
     // MARK: - Navigation

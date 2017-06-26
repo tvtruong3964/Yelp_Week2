@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import MapKit
 
-class Business: NSObject {
+class Business: NSObject, MKAnnotation {
     let name: String?
     let address: String?
     let imageURL: URL?
@@ -16,10 +17,15 @@ class Business: NSObject {
     let distance: String?
     let ratingImageURL: URL?
     let reviewCount: NSNumber?
-    
+   // let mapPin: MapPin?
     let phone: String?
     let snippetText: String?
     let snippetImage: URL?
+    
+    // map view
+    let coordinate: CLLocationCoordinate2D
+    let title: String?
+    let subtitle: String?
     
 
     init(dictionary: NSDictionary) {
@@ -36,6 +42,8 @@ class Business: NSObject {
 
         let location = dictionary["location"] as? NSDictionary
         var address = ""
+        var latitude: CLLocationDegrees = 0.0
+        var longitude: CLLocationDegrees = 0.0
         if location != nil {
             let addressArray = location!["address"] as? NSArray
             if addressArray != nil && addressArray!.count > 0 {
@@ -49,6 +57,11 @@ class Business: NSObject {
                 }
                 address += neighborhoods![0] as! String
             }
+            
+            let coordinate = location!["coordinate"] as? NSDictionary
+            
+            latitude = coordinate!["latitude"] as! Double
+            longitude = coordinate!["longitude"] as! Double
         }
         self.address = address
 
@@ -85,6 +98,11 @@ class Business: NSObject {
         } else {
             snippetImage = nil
         }
+        
+//        self.mapPin = MapPin(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), title: name!, subtitle: address)
+        self.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        self.title = name!
+        self.subtitle = address
 
         reviewCount = dictionary["review_count"] as? NSNumber
     }

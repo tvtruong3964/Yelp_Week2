@@ -40,10 +40,10 @@ class FilterViewController: UIViewController {
     
     
     var extendDistanceData = ExtendCellData(title: "Distance", items: [["name": "Auto", "value": 0],
-                                                       ["name": "0.5 km", "value": 0.5],
-                                                       ["name": "2 km", "value": 2],
-                                                       ["name": "5 km", "value": 5],
-                                                       ["name": "15 km", "value": 15]])
+                                                       ["name": "0.5 km", "value": 500],
+                                                       ["name": "2 km", "value": 2000],
+                                                       ["name": "5 km", "value": 5000],
+                                                       ["name": "15 km", "value": 15000]])
     
     var extendBestMatchData = ExtendCellData(title: "Sort By",items:
                                                     [["name": "Best Match", "value": 0],
@@ -250,7 +250,7 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate, Filt
                 // visit 3 row and bottom row when not fulldata else visit all
                 if !isFullDataCategory {
                     switch indexPath.row {
-                        case 0, YelpHelper.yelpCategory().count:
+                        case 0, 1, 2, YelpHelper.yelpCategory().count:
                             return 45
                         default:
                             return 0
